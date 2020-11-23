@@ -1,0 +1,22 @@
+PODS:
+  - CollectionKit (2.4.0):
+    - CollectionKit/Core (= 2.4.0)
+  - CollectionKit/Core (2.4.0)
+  - FSnapChatLoading (1.0.5)
+
+DEPENDENCIES:
+  - CollectionKit
+  - FSnapChatLoading
+
+SPEC REPOS:
+  trunk:
+    - CollectionKit
+    - FSnapChatLoading
+
+SPEC CHECKSUMS:
+  CollectionKit: 8f01e7629185bb81072c4aa734d105df5c2d1c8b
+  FSnapChatLoading: c06f4e0a4a4ec1eba8f2fef46f8c1653cc79b2ef
+
+PODFILE CHECKSUM: 94aa44f06427f5136022cf78191da752e396a832
+
+COCOAPODS: 1.10.0
