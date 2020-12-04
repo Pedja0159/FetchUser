@@ -7,10 +7,19 @@
 //
 
 import UIKit
+import MessageUI
+import SafariServices
 
-class UsersInfoController: UIViewController {
 
+
+
+
+
+class UsersInfoController: UIViewController, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
     
+    
+    
+
     
     var user: UserElement? {
         didSet {
@@ -47,18 +56,18 @@ class UsersInfoController: UIViewController {
             
             
             
-          
+            
         }
     }
     
     
-    func configureLabel(label: UILabel, title: String, details: String) {
+    func configureLabel(label: UILabel,title: String, details: String) {
         let attributedText = NSMutableAttributedString(attributedString: NSAttributedString(string: "\(title):  ", attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.white]))
         attributedText.append(NSAttributedString(string: "\(details)", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.white]))
         label.attributedText = attributedText
     }
     
-
+    
     
     lazy var mainStackView: UIStackView = {
         
@@ -78,15 +87,15 @@ class UsersInfoController: UIViewController {
         return label
     }()
     
-   
+    
     
     lazy var usernameLabel: UILabel = {
         let label = UILabel()
         return label
         
     }()
-        
-        
+    
+    
     
     lazy var NameLabel: UILabel = {
         let label = UILabel()
@@ -98,12 +107,17 @@ class UsersInfoController: UIViewController {
     lazy var emailLabel: UILabel = {
         
         let label = UILabel()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(EmailTapButton(tapGestureRecognizer:)))
+        label.addGestureRecognizer(tapGesture)
+        label.isUserInteractionEnabled = true
+        
         return label
     }()
     
     lazy var addressLabel: UILabel = {
         
         let label = UILabel()
+        
         return label
     }()
     
@@ -126,12 +140,26 @@ class UsersInfoController: UIViewController {
     lazy var addressGeo: UILabel = {
         
         let label = UILabel()
+        
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(TapAddressGeoButton(tapGestureRecognizer:)))
+        label.addGestureRecognizer(tapGesture)
+        label.isUserInteractionEnabled = true
+        
+        
         return label
     }()
     
     lazy var addressGeolat: UILabel = {
         
         let label = UILabel()
+        
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(TapAddressGeolatButton(tapGestureRecognizer:)))
+        label.addGestureRecognizer(tapGesture)
+        label.isUserInteractionEnabled = true
+        
+        
         return label
     }()
     
@@ -145,6 +173,10 @@ class UsersInfoController: UIViewController {
     lazy var websiteLabel: UILabel = {
         
         let label = UILabel()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(WebTapButton(tapGestureRecognizer:)))
+        label.addGestureRecognizer(tapGesture)
+        label.isUserInteractionEnabled = true
         return label
     }()
     
@@ -160,6 +192,9 @@ class UsersInfoController: UIViewController {
         return label
     }()
     
+    
+
+    
     lazy var companybs: UILabel = {
         
         let label = UILabel()
@@ -167,148 +202,290 @@ class UsersInfoController: UIViewController {
     }()
     
 
+    
+    @objc private func EmailTapButton(tapGestureRecognizer: UITapGestureRecognizer) {
         
+        sendEmail()
         
-        // MARK: - Init
+    }
+    
+    @objc private func WebTapButton(tapGestureRecognizer: UITapGestureRecognizer) {
         
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            
-            self.view.backgroundColor = UIColor.black
+  
+        guard let url = URL(string: "https://" + (user?.website)!) else {
+            return
+        }
 
-            
-            view.addSubview(mainStackView)
-            view.addSubview(idLabel)
-            view.addSubview(NameLabel)
-            view.addSubview(emailLabel)
-            view.addSubview(addressLabel)
-            view.addSubview(addressCity)
-            view.addSubview(addressSuite)
-            view.addSubview(addressZipCode)
-            view.addSubview(addressGeo)
-            view.addSubview(addressGeolat)
-            view.addSubview(phoneLabel)
-            view.addSubview(websiteLabel)
-            view.addSubview(companyLabel)
-            view.addSubview(companycatchPhrase)
-            view.addSubview(companybs)
-           
+        let safatiVC = SFSafariViewController(url: url)
+        present(safatiVC, animated: true)
+
+       
+        
+    }
+    
+    
+    @objc private func TapAddressGeoButton(tapGestureRecognizer: UITapGestureRecognizer) {
+
+        
+     
+
+
+
+    }
+
+
+    @objc private func   TapAddressGeolatButton(tapGestureRecognizer: UITapGestureRecognizer) {
+        
+        
+        
+
+        
+    }
+
     
 
-            let topMainStacViewAnchor = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50)
-            let leftMainStacViewAnchor = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0)
-            let rightMainStacViewAnchor = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0)
-            NSLayoutConstraint.activate([topMainStacViewAnchor,leftMainStacViewAnchor,rightMainStacViewAnchor])
-            
-            
-            let NameLabelTop = NameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 150)
-            let NameLabelWidth = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 110)
-            let NameLabelHeight = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 110)
-//            let NameLabelWidth = NameLabel.widthAnchor.constraint(equalToConstant: 200)
-//            let NameLabelHeight = NameLabel.heightAnchor.constraint(equalToConstant: 200)
-            NSLayoutConstraint.activate([NameLabelWidth,NameLabelHeight,NameLabelTop])
-            mainStackView.addArrangedSubview(NameLabel)
-            
-            
-            let idLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50)
-            let idLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0)
-            let idLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0)
-            NSLayoutConstraint.activate([idLabelTop,idLabelLeft,idLabelright])
-            mainStackView.addArrangedSubview(idLabel)
-            
-            
-            let phoneLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let phoneLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let phoneLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([phoneLabelTop,phoneLabelLeft,phoneLabelright])
-            mainStackView.addArrangedSubview(phoneLabel)
-            
-            let usernameLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let usernameLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let usernameLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([usernameLabelTop,usernameLabelLeft,usernameLabelright])
-            mainStackView.addArrangedSubview(usernameLabel)
-            
-            
-            
-            let emailLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let emailLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let emailLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([emailLabelTop,emailLabelLeft,emailLabelright])
-            mainStackView.addArrangedSubview(emailLabel)
-            
-            let addressLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let addressLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let addressLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([addressLabelTop,addressLabelLeft,addressLabelright])
-            mainStackView.addArrangedSubview(addressLabel)
-            
-            
-            let addressCityTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let addressCityLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let addressCityright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([addressCityTop,addressCityLeft,addressCityright])
-            mainStackView.addArrangedSubview(addressCity)
-            
-            let addressZipCodeTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let addressZipCodeLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let addressZipCoderight = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([addressZipCodeTop,addressZipCodeLeft,addressZipCoderight])
-            mainStackView.addArrangedSubview(addressZipCode)
-            
-            let addressSuiteTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let addressSuiteLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let addressSuiteright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([addressSuiteTop,addressSuiteLeft,addressSuiteright])
-            mainStackView.addArrangedSubview(addressSuite)
-            
-            let addressGeoTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let addressGeoLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let addressGeoright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([addressGeoTop,addressGeoLeft,addressGeoright])
-            mainStackView.addArrangedSubview(addressGeo)
-            
-            
-            let addressGeolatTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let addressGeolatLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let addressGeolatright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([addressGeolatTop,addressGeolatLeft,addressGeolatright])
-            mainStackView.addArrangedSubview(addressGeolat)
-            
-            let companyLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let companyLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let companyLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([companyLabelTop,companyLabelLeft,companyLabelright])
-            mainStackView.addArrangedSubview(companyLabel)
-            
-            let companycatchPhraseTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let companycatchPhraseLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let companycatchPhraseright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([companycatchPhraseTop,companycatchPhraseLeft,companycatchPhraseright])
-            mainStackView.addArrangedSubview(companycatchPhrase)
-            
-            
-            let companybsTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let companybsLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let companybsright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([companybsTop,companybsLeft,companybsright])
-            mainStackView.addArrangedSubview(companybs)
-            
-            
-            
-            let websiteLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
-            let websiteLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
-            let websiteLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
-            NSLayoutConstraint.activate([websiteLabelTop,websiteLabelLeft,websiteLabelright])
-            mainStackView.addArrangedSubview(websiteLabel)
-            
-            
 
-
+       
+    
+    func sendEmail() {
+        
+        
+        //       if MFMailComposeViewController.canSendMail() {
+        //       let message:String  = "Changes in mail composer ios 11"
+        //       let composePicker = MFMailComposeViewController()
+        //       composePicker.mailComposeDelegate = self
+        //       composePicker.delegate = self
+        //       composePicker.setToRecipients(["example@gmail.com"])
+        //       composePicker.setSubject("Testing Email")
+        //       composePicker.setMessageBody(message, isHTML: false)
+        //        composePicker.setCcRecipients(["cc@cc.cc"])
+        //        composePicker.setBccRecipients(["bcc@bcc.bcc"])
+        //
+        //       self.present(composePicker, animated: true, completion: nil)
+        //       } else {
+        //
+        //
+        //       self .showErrorMessage()
+        //
+        //       }
+        
+        
+        if MFMailComposeViewController.canSendMail() {
+            let vc = MFMailComposeViewController()
+            vc.mailComposeDelegate = self
+            vc.setSubject("Contact Us / FeedBack")
+            vc.setToRecipients(["hello@support.com"])
+            vc.setMessageBody("dad", isHTML: false)
+            self.present(UINavigationController(rootViewController: vc),animated: true)
+            
+            return
+            
+        }
+        else {
+            guard let url = URL(string: "https://www.google.com/intl/sr/gmail/about/#"
+            ) else {
+                return
+                
+            }
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true, completion: nil)
             
         }
         
         
     }
+    
+    func showErrorMessage() {
+        let alertMessage = UIAlertController(title: "could not sent email", message: "check if your device have email support!", preferredStyle: UIAlertController.Style.alert)
+        let action = UIAlertAction(title:"Okay", style: UIAlertAction.Style.default, handler: nil)
+        alertMessage.addAction(action)
+        self.present(alertMessage, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        
+        
+        
+        switch result {
+        case .cancelled:
+            print("Mail cancelled")
+        case .saved:
+            print("Mail saved")
+        case .sent:
+            print("Mail sent")
+        case .failed:
+            break
+        @unknown default:
+            fatalError()
+        }
+        self.dismiss(animated: true, completion: nil)
+        
+        
+    }
+
+    
+    
+    
+    
+    // MARK: - Init
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.view.backgroundColor = UIColor.black
+        setupLocationManager()
+        view.addSubview(mainStackView)
+        view.addSubview(idLabel)
+        view.addSubview(NameLabel)
+        view.addSubview(emailLabel)
+        view.addSubview(addressLabel)
+        view.addSubview(addressCity)
+        view.addSubview(addressSuite)
+        view.addSubview(addressZipCode)
+        view.addSubview(addressGeo)
+        view.addSubview(addressGeolat)
+        view.addSubview(phoneLabel)
+        view.addSubview(websiteLabel)
+        view.addSubview(companyLabel)
+        view.addSubview(companycatchPhrase)
+        view.addSubview(companybs)
+        
+        
+        if let url = URL(string: "mailto:abc@abc.abc") {
+            
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        let topMainStacViewAnchor = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50)
+        let leftMainStacViewAnchor = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0)
+        let rightMainStacViewAnchor = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0)
+        NSLayoutConstraint.activate([topMainStacViewAnchor,leftMainStacViewAnchor,rightMainStacViewAnchor])
+        
+        
+        let NameLabelTop = NameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 150)
+        let NameLabelWidth = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 110)
+        let NameLabelHeight = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 110)
+        //            let NameLabelWidth = NameLabel.widthAnchor.constraint(equalToConstant: 200)
+        //            let NameLabelHeight = NameLabel.heightAnchor.constraint(equalToConstant: 200)
+        NSLayoutConstraint.activate([NameLabelWidth,NameLabelHeight,NameLabelTop])
+        mainStackView.addArrangedSubview(NameLabel)
+        
+        
+        let idLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50)
+        let idLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0)
+        let idLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0)
+        NSLayoutConstraint.activate([idLabelTop,idLabelLeft,idLabelright])
+        mainStackView.addArrangedSubview(idLabel)
+        
+        
+        let phoneLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let phoneLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let phoneLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([phoneLabelTop,phoneLabelLeft,phoneLabelright])
+        mainStackView.addArrangedSubview(phoneLabel)
+        
+        let usernameLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let usernameLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let usernameLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([usernameLabelTop,usernameLabelLeft,usernameLabelright])
+        mainStackView.addArrangedSubview(usernameLabel)
+        
+        
+        
+        let emailLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let emailLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let emailLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([emailLabelTop,emailLabelLeft,emailLabelright])
+        mainStackView.addArrangedSubview(emailLabel)
+        
+        
+        
+        
+        let addressLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let addressLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let addressLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([addressLabelTop,addressLabelLeft,addressLabelright])
+        mainStackView.addArrangedSubview(addressLabel)
+        
+        
+        let addressCityTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let addressCityLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let addressCityright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([addressCityTop,addressCityLeft,addressCityright])
+        mainStackView.addArrangedSubview(addressCity)
+        
+        let addressZipCodeTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let addressZipCodeLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let addressZipCoderight = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([addressZipCodeTop,addressZipCodeLeft,addressZipCoderight])
+        mainStackView.addArrangedSubview(addressZipCode)
+        
+        let addressSuiteTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let addressSuiteLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let addressSuiteright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([addressSuiteTop,addressSuiteLeft,addressSuiteright])
+        mainStackView.addArrangedSubview(addressSuite)
+        
+        let addressGeoTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let addressGeoLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let addressGeoright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([addressGeoTop,addressGeoLeft,addressGeoright])
+        mainStackView.addArrangedSubview(addressGeo)
+        
+        
+        let addressGeolatTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let addressGeolatLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let addressGeolatright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([addressGeolatTop,addressGeolatLeft,addressGeolatright])
+        mainStackView.addArrangedSubview(addressGeolat)
+        
+        let companyLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let companyLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let companyLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([companyLabelTop,companyLabelLeft,companyLabelright])
+        mainStackView.addArrangedSubview(companyLabel)
+        
+        let companycatchPhraseTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let companycatchPhraseLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let companycatchPhraseright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([companycatchPhraseTop,companycatchPhraseLeft,companycatchPhraseright])
+        mainStackView.addArrangedSubview(companycatchPhrase)
+        
+        
+        let companybsTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let companybsLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let companybsright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([companybsTop,companybsLeft,companybsright])
+        mainStackView.addArrangedSubview(companybs)
+        
+        
+        
+        let websiteLabelTop = mainStackView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100)
+        let websiteLabelLeft = mainStackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50)
+        let websiteLabelright = mainStackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 50)
+        NSLayoutConstraint.activate([websiteLabelTop,websiteLabelLeft,websiteLabelright])
+        mainStackView.addArrangedSubview(websiteLabel)
+        
+        
+        
+        
+        
+    }
+    
+}
+
+
+
+
 
 
