@@ -12,11 +12,12 @@ import UIKit
 class CollectionViewCell: UICollectionViewCell {
     
     
+    
     var user: UserElement? {
         didSet {
             nameLabel.text = user?.name
             imageView.image = UIImage(named: "user")
-          
+            
         }
     }
     
@@ -37,7 +38,7 @@ class CollectionViewCell: UICollectionViewCell {
     }()
     
     lazy var nameLabel: UILabel = {
-       let label = UILabel()
+        let label = UILabel()
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 14)
         return label
@@ -65,7 +66,7 @@ class CollectionViewCell: UICollectionViewCell {
         
         addSubview(nameContainerView)
         nameContainerView.anchor(top: nil, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 32)
-       
+        
         
         
     }

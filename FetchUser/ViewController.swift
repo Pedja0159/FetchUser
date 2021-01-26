@@ -15,9 +15,8 @@ class ViewController: UICollectionViewController {
     private let reuseIdentifire = "CollectionViewCell"
     var users = [UserElement]()
     
-  
-
-
+    
+    
     var activityIndicator: UIActivityIndicatorView = {
         let iv = UIActivityIndicatorView()
         iv.style = .large
@@ -25,14 +24,14 @@ class ViewController: UICollectionViewController {
         return iv
     }()
     
-   
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchUser()
         configureViewComponents()
         
-
+        
         let layout = self.collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         layout.sectionInset = UIEdgeInsets(top: 32, left: 8, bottom: 8, right: 8)
         layout.itemSize = CGSize(width: (self.collectionView.frame.size.width - 30)/2, height: self.collectionView.frame.size.height/4)
@@ -44,7 +43,7 @@ class ViewController: UICollectionViewController {
         
     }
     
-     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return users.count
     }
     
@@ -53,22 +52,22 @@ class ViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifire, for: indexPath) as! CollectionViewCell
         cell.backgroundColor = .red
         cell.user = users[indexPath.item]
-      
-       
+        
+        
         
         
         return cell
     }
     
-   override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            
-         
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        
         let controller = UsersInfoController()
         controller.user = users[indexPath.row]
-               self.navigationController?.pushViewController(controller, animated: true)
+        self.navigationController?.pushViewController(controller, animated: true)
     }
-   
-          
+    
+    
     
     func configureViewComponents() {
         
@@ -85,7 +84,7 @@ class ViewController: UICollectionViewController {
     
     
     
-
+    
     func fetchUser () {
         
         activityIndicator.startAnimating()
@@ -100,41 +99,42 @@ class ViewController: UICollectionViewController {
                 return
             }
             do {
-
-                 let decoder = JSONDecoder()
-
+                
+                let decoder = JSONDecoder()
+                
                 self.users = try decoder.decode([UserElement].self, from: data)
-
-               
-
+                
+                
+                
                 let stringOne = String(decoding: data, as: UTF8.self)
                 print(stringOne)
-
-
-
-
+                
+                
+                
+                
             } catch {
                 print(error)
-
-
-
+                
+                
+                
             }
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
                 self.activityIndicator.stopAnimating()
                 self.activityIndicator.isHidden = true
+                
             }
-
             
-
-
+            
+            
+            
         })
         task.resume()
-
+        
     }
     
     
-
+    
     
 }
 
